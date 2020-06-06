@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+    database:
+        image: postgres:12.3-alpine
+        environment:
+            POSTGRES_USER: roulette
+            POSTGRES_PASSWORD: roulette
+            POSTGRES_DB: roulette
+        ports: [5432]
