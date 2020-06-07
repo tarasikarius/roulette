@@ -29,7 +29,7 @@ class Bid
     private $cell;
 
     /**
-     * @ORM\ManyToOne(targetEntity=User::class)
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="bids")
      * @ORM\JoinColumn(nullable=false)
      *
      * @Groups({"bid:post", "spin:view"})
@@ -40,6 +40,8 @@ class Bid
     /**
      * @ORM\ManyToOne(targetEntity=Spin::class, inversedBy="bids")
      * @ORM\JoinColumn(nullable=false)
+     *
+     * @Groups({"user:statistic"})
      */
     private $spin;
 

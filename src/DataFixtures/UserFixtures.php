@@ -9,7 +9,7 @@ use Symfony\Component\Security\Core\Encoder\EncoderFactoryInterface;
 
 class UserFixtures extends Fixture
 {
-    const USERS = ['james', 'lars', 'kirk', 'jason'];
+    const USERS = ['admin', 'james', 'lars', 'kirk', 'jason'];
 
     private $encoderFactory;
 
@@ -24,7 +24,7 @@ class UserFixtures extends Fixture
             $user = new User();
             $user->setUsername($username);
             $user->setEmail($username.'@example.com');
-            $user->setRoles(['ROLE_PLAYER']);
+            $user->setRole($username === 'admin' ? 'ROLE_ADMIN' : 'ROLE_PLAYER');
             $user->setPassword($this->encoderFactory->getEncoder(User::class)->encodePassword($username, null));
 
             $manager->persist($user);

@@ -18,7 +18,7 @@ class Round
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      *
-     * @Groups({"spin:view"})
+     * @Groups({"spin:view", "user:statistic"})
      */
     private $id;
 

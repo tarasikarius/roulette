@@ -39,7 +39,7 @@ class Spin
      * @ORM\ManyToOne(targetEntity=Round::class, inversedBy="spins")
      * @ORM\JoinColumn(nullable=false)
      *
-     * @Groups({"spin:view"})
+     * @Groups({"spin:view", "user:statistic"})
      * @Assert\NotNull()
      */
     private $round;

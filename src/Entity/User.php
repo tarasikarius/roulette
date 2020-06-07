@@ -19,6 +19,8 @@ class User implements UserInterface
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     *
+     * @Groups({"user:statistic"})
      */
     private $id;
 
@@ -35,9 +37,9 @@ class User implements UserInterface
     private $email;
 
     /**
-     * @ORM\Column(type="json")
+     * @ORM\Column(name="role", type="string")
      */
-    private $roles = [];
+    private $role;
 
     /**
      * @var string The hashed password
@@ -47,13 +49,23 @@ class User implements UserInterface
 
     /**
      * @ORM\OneToMany(targetEntity=Spin::class, mappedBy="initiator", orphanRemoval=true)
+     *
+     * @Groups({"user:statistic"})
      */
     private $spins;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Bid::class, mappedBy="player", orphanRemoval=true)
+     *
+     * @Groups({"user:statistic"})
+     */
+    private $bids;
 
 
     public function __construct()
     {
         $this->spins = new ArrayCollection();
+        $this->bids = new ArrayCollection();
     }
 
 
@@ -96,16 +108,20 @@ class User implements UserInterface
      */
     public function getRoles(): array
     {
-        $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
+        $roles = [$this->role];
         $roles[] = 'ROLE_USER';
 
         return array_unique($roles);
     }
 
-    public function setRoles(array $roles): self
+    public function getRole(): string
     {
-        $this->roles = $roles;
+        return $this->role;
+    }
+
+    public function setRole(string $role): self
+    {
+        $this->role = $role;
 
         return $this;
     }
@@ -145,31 +161,16 @@ class User implements UserInterface
     /**
      * @return Collection|Spin[]
      */
-    public function getSpins(): Collection
+    public function getSpins(): array
     {
-        return $this->spins;
+        return $this->spins->toArray();
     }
 
-    public function addSpin(Spin $spin): self
+    /**
+     * @return Collection|Bid[]
+     */
+    public function getBids(): array
     {
-        if (!$this->spins->contains($spin)) {
-            $this->spins[] = $spin;
-            $spin->setPlayer($this);
-        }
-
-        return $this;
-    }
-
-    public function removeSpin(Spin $spin): self
-    {
-        if ($this->spins->contains($spin)) {
-            $this->spins->removeElement($spin);
-            // set the owning side to null (unless already changed)
-            if ($spin->getPlayer() === $this) {
-                $spin->setPlayer(null);
-            }
-        }
-
-        return $this;
+        return $this->bids->toArray();
     }
 }

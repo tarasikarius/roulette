@@ -19,32 +19,16 @@ class RoundRepository extends ServiceEntityRepository
         parent::__construct($registry, Round::class);
     }
 
-    // /**
-    //  * @return Round[] Returns an array of Round objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function countPlayers()
     {
         return $this->createQueryBuilder('r')
-            ->andWhere('r.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('r.id', 'ASC')
-            ->setMaxResults(10)
+            ->select('r.id as roundId')
+            ->addSelect('count(distinct b.player) as playersCount')
+            ->join('r.spins', 's')
+            ->join('s.bids', 'b')
+            ->join('b.player', 'u')
+            ->groupBy('r.id')
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Round
-    {
-        return $this->createQueryBuilder('r')
-            ->andWhere('r.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }
