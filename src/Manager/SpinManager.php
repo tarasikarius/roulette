@@ -78,25 +78,20 @@ class SpinManager
 
     private function generateWinningCell(Round $round): int
     {
-        $cells = range(Spin::LOWEST_CELL, Spin::JACKPOT_CELL);
+        $cells = range(Spin::LOWEST_CELL, Spin::JACKPOT_CELL - 1);
         foreach ($round->getSpins() as $spin) {
-            if ($key = array_search($spin->getWinningCell(), $cells)) {
+            $key = array_search($spin->getWinningCell(), $cells);
+            if (false !== $key) {
                 unset($cells[$key]);
             }
         }
+
+        if (empty($cells)) {
+            return Spin::JACKPOT_CELL;
+        }
+
         $cells = array_values($cells);
 
         return $cells[array_rand($cells, 1)];
-
-//        $min = Spin::LOWEST_CELL - 1;
-//        $max = Spin::JACKPOT_CELL - 1;
-//
-//        $num = mt_rand($min, $max);
-//
-//        for ($i = $max; $i > $min; $i--) {
-//            if ($num < $i) {
-//                return $i;
-//            }
-//        }
     }
 }
